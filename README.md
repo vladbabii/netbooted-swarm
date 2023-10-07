@@ -21,3 +21,30 @@ apt install -y \
   cron
 systemctl enable cron
 ```
+
+# Let's install and configure netboot server components
+````
+apt-get install tftpd-hpa
+mkdir -p /storage/tftp
+chmod -R 777 /storage/tftp/
+touch /storage/tftp/undionly.kpxe
+```
+edit /etc/default/tftpd-hpa
+
+from
+```
+  TFTP_DIRECTORY="/srv/tftp"
+```
+to
+```
+  TFTP_DIRECTORY="/storage/tftp"
+```
+
+then restart tftp server
+```
+/etc/init.d/tftpd-hpa restart
+```
+
+
+
+
