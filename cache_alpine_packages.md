@@ -84,6 +84,15 @@ services:
           - node.hostname == <serverhostname>
 ```
 
+Update netboot.ipxe and change the line
+```
+set mirror http://dl-cdn.alpinelinux.org/alpine
+```
+to
+```
+set mirror http://192.168.100.100:4991/alpinelinux
+```
+
 # Test settings
 On a worker node do 
 ```
