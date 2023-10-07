@@ -9,6 +9,8 @@ netboot apkvol based on
 * https://www.apalrd.net/posts/2022/alpine_vdiclient/
 * https://www.youtube.com/watch?v=r-TnP06K-gE
 
+Docker swarm cleanup script
+* https://gist.github.com/sxiii/4f60940d257c31ca0ff071c1a015eab2
 
 # Install Ubuntu Server LTS minimal install
 ... there are plenty of guides on this. Just make sure to set a static ip
@@ -202,6 +204,22 @@ I only needed the BIOS version but if you need EFI then also uncomment the make.
 
 # Trt it out
 right now your pc/server/thin client that supports netboot should get an ip from dhcp and also netboot the os. alpine should complain about not having an apkvol and drop you a shell
+
+# Install docker on ubuntu server
+... plenty of guides out there
+then run
+```
+docker swarm init
+```
+This will give you the swarm join command to add a node to your cluster. Save it - you'll need it later.
+
+Next, let's setup docker swarm auto-removal of dead nodes 
+
+create a .sh file somewhere and put it in cron every 1/2/5/etc minutes
+I'm running this as root so i don't need any sudo and/or group management for docker access for other users.
+```
+docker node rm $(docker node ls | grep Down | awk -F" " '{ print $1 }')
+```
 
 # Creating an apkvol
 I would recoomend you to watch the video about apkvol linked at the start of this document first.
