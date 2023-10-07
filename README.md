@@ -206,28 +206,76 @@ I only needed the BIOS version but if you need EFI then also uncomment the make.
 right now your pc/server/thin client that supports netboot should get an ip from dhcp and also netboot the os. alpine should complain about not having an apkvol and drop you a shell
 
 # Install docker on ubuntu server
+
 ... plenty of guides out there
+
 then run
 ```
 docker swarm init
 ```
 This will give you the swarm join command to add a node to your cluster. Save it - you'll need it later.
 
+
 Next, let's setup docker swarm auto-removal of dead nodes 
 
+
 create a .sh file somewhere and put it in cron every 1/2/5/etc minutes
+
 I'm running this as root so i don't need any sudo and/or group management for docker access for other users.
 ```
 docker node rm $(docker node ls | grep Down | awk -F" " '{ print $1 }')
 ```
 
 # Creating an apkvol
+
 I would recoomend you to watch the video about apkvol linked at the start of this document first.
+
 Basically an apkvol is a tar.gz file which contains all the information needed to configure your freshly netbooted os and will be used to setup /etc/ files and automatically install packages
 
+The apkvol should do these things
+1. install a very minimal list of packages
+2. download bash script hosted on the server after boot and run it
+
+The script is what allows you to automatically setup things on the worker nodes without needing to rebuild the apkvol after every change
+
+# What to install in apkvol
+```
+apk update
+apk add nano openssh
+rc-update add sshd
+```
+edit /etc/ssh/sshd_config and set permit root login to yes - we're only going to have single user on the worker nodes
+```
+service sshd start
+```
+at this point you can connect via ssh to this machine and configure the rest via ssh connection if it's more confortable for you
+
+```
+echo "http://dl-cdn.alpinelinux.org/alpine/v3.18/main" > /etc/apk/repositories
+echo "http://dl-cdn.alpinelinux.org/alpine/v3.18/community" >> /etc/apk/repositories
+apk update
+rc-update add local default
+apk add bash
+```
+if you want to be dropped in a shell after a worker boots you can edit /etc/inittab and update the tty1.. line to
+```
+tty1::respawn:/bin/bash
+```
+next we'll create the script that runs immediately after boot
+```
+touch /etc/local.d/q.start
+chmod +x /etc/local.d/q.start
+```
+edit q.start script - replace the 192.168.100.100 with the ip address of the ubuntu server you installed
+```
+#!/bin/bash
+wget -O "/tmp/q.sh" "http://192.168.100.100/q.sh"
+chmod +x /tmp/q.sh
+/bin/bash /tmp/q.sh | tee /tmp/q.log
+```
 
 
-
+   
 
 
 
