@@ -1,6 +1,8 @@
 # Install portainer to manage the swarm
 
-On the server do the following
+Portainer is nice because it can auto deploy agents on all nodes automatically so we don't have to do anything else for each worker node - netboot it and use it.
+
+On the server do the following  (replace <serverhostname> with the actual server hostname)
 
 ```
 mkdir -p /storage/portainer/data
@@ -45,7 +47,7 @@ services:
       placement:
 #        constraints: [node.role == manager]
         constraints:
-          - node.hostname == dcm0201
+          - node.hostname == <serverhostname>
 
 networks:
   agent_network:
