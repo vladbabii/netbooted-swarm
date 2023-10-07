@@ -18,6 +18,14 @@ Docker swarm cleanup script
 # Install Ubuntu Server LTS minimal install
 ... there are plenty of guides on this. Just make sure to set a static ip
 
+If you want to use alpine then use the videos and docs in the thank you section as reference.
+
+If you want to use something else (i would recommend debian) feel free to do so. I used ubuntu server because it was already installed
+
+# About this guide
+
+I tried many things until i got everything working properly. This is a compilation of my nodes and there might be some mistakes. Please open a issue if you find any mistakes/errors. Also this guide is for experienced linux users - if you want to understand what each command does below then please use a search engine - many people will have better answers than i do.
+
 # After first boot install some useful tools
 ```
 apt remove -y --autoremove snapd
