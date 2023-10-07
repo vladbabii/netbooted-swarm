@@ -114,7 +114,7 @@ http {
     access_log /var/log/nginx/access.log;
     keepalive_timeout 3000;
     server {
-        listen 80;
+        listen 64080;
         root /storage/www;
         index index.html index.htm;
         server_name localhost;
@@ -173,7 +173,7 @@ set cmdline modules=loop,squashfs quiet
 echo cmdline is ${cmdline}
 
 #Server address
-set server http://${next-server}
+set server http://${next-server}:64080
 echo server is ${server}
 
 #Kernel file
