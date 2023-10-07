@@ -1,4 +1,7 @@
 # NetBooted Swarm
+This is a guide to setup
+1. server - a ubuntu lts server with the netboot files and the docker swarm leader
+2. worker(s) - any number of netbooted clients that will boot from the server and attach to it as a docker swarm node
 
 # May thanks to
 netboot server 
