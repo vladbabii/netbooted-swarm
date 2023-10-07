@@ -5,7 +5,7 @@
 * https://www.apalrd.net/posts/2022/alpine_pxe/#download--configure-ipxe
 
 # Install Ubuntu Server LTS minimal install
-...
+... there are plenty of guides on this. Just make sure to set a static ip
 
 # After first boot install some useful tools
 ```
@@ -190,6 +190,9 @@ cp bin-i386-pcbios/undionly.kpxe /storage/tftp/
 #Also not building arm variants for this project
 ```
 I only needed the BIOS version but if you need EFI then also uncomment the make.. and cp.. lines under Build EFI
+
+# Configure DHCP server
+... here youre on your own, plenty of guides on how to do it for all routers. Set the server ip to the one you used on the ubuntu server above
 
 
 
