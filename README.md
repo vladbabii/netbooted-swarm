@@ -18,9 +18,11 @@ This is a guide to setup
 I am running this on a set of HP T520 with a sodimm of 8 gb ram ( https://www.parkytowers.me.uk/thin/hp/t520/ )
 
 On the server
+
 ![server node list](images/server.png)
 
 On each worker
+
 ![worker after boot](images/netboot-worker.png)
 
 # May thanks to
