@@ -53,7 +53,7 @@ fi
 edit /storage/server_keepalived/check_boothttp.sh
 ```
 #!/bin/bash
-STATUS=$(netstat -antepul | grep 80 | grep -i listen | grep nginx | wc -l)
+STATUS=$(netstat -antepul | grep 64080 | grep -i listen | wc -l)
 if [ "$STATUS" = "1" ]; then
   # working
   exit 0
