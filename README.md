@@ -200,6 +200,20 @@ I only needed the BIOS version but if you need EFI then also uncomment the make.
 # Configure DHCP server
 ... here youre on your own, plenty of guides on how to do it for all routers. Set the server ip to the one you used on the ubuntu server above
 
+# Trt it out
+right now your pc/server/thin client that supports netboot should get an ip from dhcp and also netboot the os. alpine should complain about not having an apkvol and drop you a shell
+
+# Creating an apkvol
+I would recoomend you to watch the video about apkvol linked at the start of this document first.
+Basically an apkvol is a tar.gz file which contains all the information needed to configure your freshly netbooted os and will be used to setup /etc/ files and automatically install packages
+
+
+
+
+
+
+
+
 
 
 
