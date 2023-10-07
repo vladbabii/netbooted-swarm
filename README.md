@@ -1,7 +1,21 @@
 # NetBooted Swarm
 This is a guide to setup
-1. server - a ubuntu lts server with the netboot files and the docker swarm leader
-2. worker(s) - any number of netbooted clients that will boot from the server and attach to it as a docker swarm node
+* server
+  *  ubuntu lts server with the netboot files and the docker swarm leader
+  *  requies at least
+    *  2-core cpu
+    *  2 gb memory
+    *  40 gb storage for a basic config
+    *  gigabit networking
+* worker(s)
+  * any number of netbooted clients that will boot from the server and attach to it as a docker swarm node
+  * requires at least
+    * 2 core cpu
+    * memory as needed
+    * gigabit networking
+    * NO DISK
+   
+I am running this on a set of HP T520 with a sodimm of 8 gb ram ( https://www.parkytowers.me.uk/thin/hp/t520/ )
 
 # May thanks to
 netboot server 
@@ -283,7 +297,12 @@ edit q.start script - replace the 192.168.100.100 with the ip address of the ubu
 wget -O "/tmp/q.sh" "http://192.168.100.100/q.sh"
 chmod +x /tmp/q.sh
 /bin/bash /tmp/q.sh | tee /tmp/q.log
+sleep 10
+/bin/bash /tmp/q.sh | tee /tmp/q.log
+sleep 20
+/bin/bash /tmp/q.sh | tee /tmp/q.log
 ```
+we are running the script multiple times to make sure everything is setup properly
 
 Now we need to generate the actual file and then copy it to the ubuntu server. I usually save this script and run it to rebuild the file
 * remove unneeded packages
