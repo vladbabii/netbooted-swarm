@@ -274,7 +274,122 @@ chmod +x /tmp/q.sh
 /bin/bash /tmp/q.sh | tee /tmp/q.log
 ```
 
+Now we need to generate the actual file and then copy it to the ubuntu server. I usually save this script and run it to rebuild the file
+* remove unneeded packages
+* build the image
+* copy the image to the ubuntu server
+* add back the packages that were removed to allow easy editing
+```
+apk del nano
+cd /
+lbu package thinclient.apkovl.tar.gz 
+scp /thinclient.apkovl.tar.gz root@192.168.100.100:/storage/wwww 
+apk add nano
+```
+Yould also remove ssh but I leave it here since it's nice to be able to ssh into the nodes to check things
 
+# q.start script on the server
+edit /storage/www/q.sh
+```
+#!/bin/bash
+
+## LOCAL IP
+
+LOCALIP=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1)
+echo "Ip is $LOCALIP"
+
+## HOSTNAME
+
+NEWHOSTNAME=${LOCALIP//./-}
+NEWHOSTNAME="worker-$NEWHOSTNAME"
+
+HOSTNAME=$(cat /etc/hostname)
+echo "Hostname should be $NEWHOSTNAME"
+if [ "$HOSTNAME" = "$NEWHOSTNAME" ]; then
+  echo " ... ok"
+else
+  echo " ... is $HOSTNAME, updating..."
+  echo $NEWHOSTNAME > /etc/hostname
+  hostname -F /etc/hostname
+  echo " ... changed to $NEWHOSTNAME"
+  echo " ... updating /etc/hosts"
+  echo "127.0.0.1       $NEWHOSTNAME"   > /etc/hosts
+  echo "::1             $NEWHOSTNAME"   >> /etc/hosts
+fi
+```
+This should set the hostname of each netbooted worker to worker-<ip address with - instead of .>. This name will also be the node name in docker, making things a bit easier to manage.
+
+For example if a worker boots with 192.168.100.11 then it will run with hostname worker-192-168-100-11
+
+# Testing the apkvol
+Reboot your netboot worker. It should netboot then download the apkvol and apply it then run the script and drop you into a shell prompt for root.
+
+# Now we'll just have to update the q.sh script to add more things in it
+edit q.sh on server and append the following contents to the existing file. Do not forget to replace the "docker swarm join ...." line with the actual command you saved (you did save it, right?) when you created the swarm
+```
+## DOCKER installed ?
+
+if test -f "/usr/bin/docker"; then
+  echo "docker exists"
+else
+  echo "installing docker"
+  apk add --update docker openrc
+  sleep 1
+  rc-update add docker boot
+  sleep 1
+  service docker start
+  sleep 1
+fi
+
+## DOCKER started ?
+pgrep -x containerd >/dev/null && echo "docker running already" || service docker start
+
+
+## SWARM joined ?
+
+TOJOIN="no"
+case "$(docker info --format '{{.Swarm.LocalNodeState}}')" in
+  inactive)
+    echo "Node is not in a swarm cluster"
+    TOJOIN="yes"
+    ;;
+  pending)
+    echo "Node is not in a swarm cluster"
+    TOJOIN="yes"
+    ;;
+  active)
+    echo "Node is in a swarm cluster";;
+  locked)
+    echo "Node is in a locked swarm cluster";;
+  error)
+    echo "Node is in an error state"
+    TOJOIN="yes"
+    ;;
+  *)
+    echo "Unknown state $(docker info --format '{{.Swarm.LocalNodeState}}')"
+    TOJOIN="YES"
+    ;;
+esac
+
+if [ "$TOJOIN" = "no" ]; then
+  echo " ... NOT trying to join swarm"
+else
+  echo " ... trying to JOIN swarm!"
+  docker swarm join ....
+  sleep 1
+  echo "Docker status is now ...."
+  $(docker info --format '{{.Swarm.LocalNodeState}}')
+fi
+```
+
+# Enjoy!
+If you reboot your worker or just run the /etc/local.d/q.sh script again you should have docker installed, started and joined the swarm.
+
+You can check this by running on the server
+```
+docker node ls
+```
+and see your net booted nodes started
    
 
 
