@@ -56,7 +56,11 @@ http {
     }
 }
 ```
-
+You should replace the line
+```
+set $backend http://mirrors.hostico.ro;
+```
+with another alpine mirror that's closer to you.
 
 In portainer create a new stack with (replace <serverhostname> with the actual hostname)
 ```
@@ -79,3 +83,49 @@ services:
         constraints:
           - node.hostname == <serverhostname>
 ```
+
+# Test settings
+On a worker node do 
+```
+echo "http://192.168.100.100:4991/alpinelinux/v3.18/main" > /etc/apk/repositories 
+echo "http://192.168.100.100:4991/alpinelinux/v3.18/community" >> /etc/apk/repositories
+apk update
+```
+then do install any random packages you're normally not uing
+```
+apk add nginx
+apk add mysql
+```
+
+# Updating the apkvol
+Now we need to update the apkvol because after it gets applied the repositories from it will be used before the q.start script runs.
+So when generating the apkvol the script now will be changed from
+```
+apk del nano
+cd /
+lbu package thinclient.apkovl.tar.gz 
+scp /thinclient.apkovl.tar.gz root@192.168.100.100:/storage/wwww 
+apk add nano
+```
+to
+```
+apk del nano
+echo "http://192.168.100.100:4991/alpinelinux/v3.18/main" > /etc/apk/repositories 
+echo "http://192.168.100.100:4991/alpinelinux/v3.18/community" >> /etc/apk/repositories
+cd /
+lbu package thinclient.apkovl.tar.gz 
+scp /thinclient.apkovl.tar.gz root@192.168.100.100:/storage/wwww
+echo "http://dl-cdn.alpinelinux.org/alpine/v3.18/main" > /etc/apk/repositories 
+echo "http://dl-cdn.alpinelinux.org/alpine/v3.18/community" >> /etc/apk/repositories 
+apk add nano
+```
+This allows you to
+* set local package caching server as apk source
+* build and copy over apkvol
+* set back the default repositories so you can keep working in the apkvol
+
+
+
+
+
+
