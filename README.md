@@ -22,7 +22,7 @@ apt install -y \
 systemctl enable cron
 ```
 
-# Let's install and configure netboot server components
+# Install and configure netboot server components
 ```
 apt-get install tftpd-hpa
 mkdir -p /storage/tftp
@@ -98,7 +98,7 @@ rm alpine-netboot*
 chown -R www-data:www-data /storage/www
 ```
 
-# Build the ipxe image for x86 / x64
+# Build ipxe image for x86 / x64
 ```
 apt install -y make gcc binutils perl mtools mkisofs syslinux liblzma-dev isolinux
 cd /srv
