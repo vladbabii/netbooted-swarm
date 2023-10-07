@@ -17,5 +17,7 @@ apt install -y \
   iputils-ping \
   net-tools \
   iperf \
-  iputils-ping
+  iputils-ping \
+  cron
+systemctl enable cron
 ```
