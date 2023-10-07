@@ -1,8 +1,14 @@
 # NetBooted Swarm
 
 # May thanks to
+netboot server 
 * https://www.youtube.com/watch?v=xmVGIdScCQA
 * https://www.apalrd.net/posts/2022/alpine_pxe/#download--configure-ipxe
+* 
+netboot apkvol based on
+* https://www.apalrd.net/posts/2022/alpine_vdiclient/
+* https://www.youtube.com/watch?v=r-TnP06K-gE
+
 
 # Install Ubuntu Server LTS minimal install
 ... there are plenty of guides on this. Just make sure to set a static ip
