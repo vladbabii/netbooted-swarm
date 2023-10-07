@@ -1,9 +1,28 @@
 # Keepalived for multiple servers
+If you have multiple servers that offer the same files and use them as multiple docker managers, you need a floating ip to have a single entry point for booting the workers
 
-Install
+Servers with their ips:
+* 1 - .201
+* 2 - .202
+* 3 - .203
+
+Floating ips for services:
+* fttpd server: .210:69
+* http boot server: .211:64080
+* alpine cache server: .212:4991
+* docker registry server: .2013:5000
+
+
+
+# WIF
+
+## Install
 ```
 mkdir -p /storage/server_keepalived
 apt update && apt install -y keepalived
+```
+
+## Configure
 touch /storage/server_keepalived/check_alpine_caching_repository.sh
 touch /storage/server_keepalived/check_docker_caching_registry.sh
 touch /storage/server_keepalived/check_tftpd.sh
