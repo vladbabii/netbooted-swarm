@@ -1,5 +1,9 @@
 # NetBooted Swarm
 
+# May thanks to
+* https://www.youtube.com/watch?v=xmVGIdScCQA
+* https://www.apalrd.net/posts/2022/alpine_pxe/#download--configure-ipxe
+
 # Install Ubuntu Server LTS minimal install
 ...
 
