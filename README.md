@@ -302,7 +302,7 @@ chmod +x /etc/local.d/q.start
 edit q.start script - replace the 192.168.100.100 with the ip address of the ubuntu server you installed
 ```
 #!/bin/bash
-wget -O "/tmp/q.sh" "http://192.168.100.100/q.sh"
+wget -O "/tmp/q.sh" "http://192.168.100.100:64080/q.sh"
 chmod +x /tmp/q.sh
 /bin/bash /tmp/q.sh | tee /tmp/q.log
 sleep 10
