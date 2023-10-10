@@ -22,3 +22,6 @@ If using docker then the /etc/docker/daemon.json must contain
   }
 }
 ```
+also you if your server is different than the main one you need to add in q.sh when hostname is checked
+```  echo "<ip>    <hostname of rsyslog server>"        >> /etc/hosts
+```
