@@ -13,3 +13,12 @@ fi
 ## rsyslog running ?
 pgrep -x /usr/sbin/rsyslogd >/dev/null && echo "rsyslog running already" || service rsyslog start
 ```
+If using docker then the /etc/docker/daemon.json must contain
+```
+{
+  "log-driver": "syslog",
+  "log-opts": {
+    "syslog-address": "udp://192.168.168:100:514"
+  }
+}
+```
