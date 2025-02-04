@@ -23,6 +23,7 @@ apt update && apt install -y keepalived
 ```
 
 ## Configure
+```
 touch /storage/server_keepalived/check_alpine_caching_repository.sh
 touch /storage/server_keepalived/check_docker_caching_registry.sh
 touch /storage/server_keepalived/check_tftpd.sh
